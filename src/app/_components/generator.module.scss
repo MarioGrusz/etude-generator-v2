@@ -1,0 +1,163 @@
+@import "../styles/mixins";
+@import "../styles/variables";
+
+.mainContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 2rem; //4rem
+
+  min-height: fit-content;
+  overflow-y: auto;
+  max-width: 100%;
+
+  @include respond-to("extra-large") {
+    gap: 3rem;
+  }
+}
+
+.headerSection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  gap: 0.2rem;
+
+  min-height: fit-content;
+  overflow-y: auto;
+}
+
+.headerMain {
+  margin-left: -5.5rem;
+  width: fit-content;
+  max-width: 100%;
+  text-align: flex-start;
+  overflow: hidden;
+
+  @include respond-to("medium") {
+    margin-left: -5rem;
+  }
+
+  h1 {
+    font-size: 2.2rem; //5rem
+    font-weight: 900;
+
+    @include respond-to("small") {
+      //width: 50%;
+      font-size: 4rem;
+    }
+
+    @include respond-to("2extra-large") {
+      font-size: 5rem;
+    }
+  }
+}
+
+.boyImage {
+  display: block;
+  height: 15rem;
+  width: 15rem;
+  align-self: flex-start;
+
+  //border: 1px solid black;
+  transform: translateX(-2rem);
+
+  @include respond-to("medium") {
+    height: 20rem;
+    width: 20em;
+    transform: translateX(0);
+  }
+
+  @include respond-to("extra-large") {
+    transform: translateX(0);
+  }
+}
+
+.cardContainer {
+  max-width: 100%;
+  width: 90%;
+  margin-inline: auto;
+
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+
+  place-items: center;
+
+  @include respond-to("small") {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 2rem;
+  }
+
+  @include respond-to("extra-large") {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+}
+
+.generator {
+  outline: none;
+  border: none;
+  border: 1px solid back;
+  border-radius: 5rem;
+  padding: 1rem 3rem;
+  background-color: #ede7d9;
+  color: #02182b;
+
+  margin-inline: auto;
+
+  span {
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    text-align: center;
+
+    @include respond-to("small") {
+      font-size: 1.3rem;
+    }
+  }
+
+  @include respond-to("small") {
+    padding: 1rem 5rem;
+  }
+}
+
+.footer {
+  margin-top: -1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+
+  p {
+    text-align: center;
+    font-size: 0.7rem;
+  }
+}
+
+.developedBy {
+  display: inline;
+
+  a {
+    display: inline;
+    font-size: 0.7rem;
+    font-weight: 700;
+    position: relative;
+  }
+
+  a::before {
+    background: black;
+    content: "";
+    inset: 0;
+    position: absolute;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.5s ease-in-out;
+    z-index: -1;
+  }
+
+  a:hover::before {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}

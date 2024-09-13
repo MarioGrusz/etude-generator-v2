@@ -1,0 +1,18 @@
+$breakpoints: (
+  "extra-small": 480px,
+  "small": 640px,
+  "medium": 768px,
+  "large": 1024px,
+  "extra-large": 1280px,
+  "2extra-large": 1536px,
+);
+
+@mixin respond-to($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    @media (min-width: map-get($breakpoints, $breakpoint)) {
+      @content;
+    }
+  } @else {
+    @warn "Unfortunately, no value could be found for the specified breakpoint: `#{$breakpoint}`.";
+  }
+}

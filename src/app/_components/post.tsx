@@ -7,6 +7,11 @@ import styles from "../index.module.css";
 
 export function LatestPost() {
   const [latestPost] = api.post.getLatest.useSuspenseQuery();
+  const [latestData] = api.data.fetchData.useSuspenseQuery({
+    specifier: "all",
+  });
+
+  console.log("LATEST", latestData);
 
   const utils = api.useUtils();
   const [name, setName] = useState("");

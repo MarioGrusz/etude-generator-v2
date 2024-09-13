@@ -1,18 +1,13 @@
-import Link from "next/link";
-
-import { LatestPost } from "~/app/_components/post";
-import { api, HydrateClient } from "~/trpc/server";
-import styles from "./index.module.css";
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { HydrateClient } from "~/trpc/server";
+import Generator from "./_components/generator";
 
 export default async function Home() {
-  const hello = await api.post.hello({ text: "from tRPC" });
-
-  void api.post.getLatest.prefetch();
-
   return (
     <HydrateClient>
-      <main className={styles.main}>
-        <h1>Etude Generator</h1>
+      <main style={{ padding: "1rem 0" }}>
+        <Generator />
       </main>
     </HydrateClient>
   );

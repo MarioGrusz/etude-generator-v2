@@ -1,0 +1,53 @@
+@import "../../styles/mixins";
+@import "../../styles/variables";
+
+.switch {
+  // margin-right: 7rem;
+  align-self: center; //flexend
+  display: flex;
+  border-radius: 1.5rem;
+  padding: 0.2rem;
+  border: solid 1px $black;
+  transition: background-color 0.3s ease, color 0.3s ease;
+
+  @include respond-to("small") {
+    align-self: flex-end;
+    margin-right: 1rem;
+  }
+
+  @include respond-to("extra-large") {
+    margin-right: 3rem;
+  }
+
+  .switch-pl,
+  .switch-en {
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    font-size: 0.1rem;
+    font-weight: 300;
+    line-height: 1;
+    text-transform: uppercase;
+    border-radius: 1.5rem;
+    text-decoration: none;
+    display: flex;
+    flex-direction: row;
+    gap: 0.3rem;
+    padding: 0.3rem 1rem;
+
+    color: $black;
+
+    .image {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+      width: fit-content;
+    }
+  }
+}
+
+.switch a.active {
+  background-color: $black;
+  color: $white;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
