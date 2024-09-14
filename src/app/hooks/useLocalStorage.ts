@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 export const useLocalStorage = (key: string) => {
   const setItem = (value: unknown) => {
     try {

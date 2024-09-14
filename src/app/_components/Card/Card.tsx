@@ -1,3 +1,5 @@
+"use client";
+
 import Locker from "../Locker";
 import styles from "./card.module.scss";
 import React from "react";

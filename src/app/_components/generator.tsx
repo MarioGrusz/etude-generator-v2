@@ -1,6 +1,6 @@
+"use client";
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-"use client";
 
 import styles from "./generator.module.scss";
 import React, { useState, useEffect } from "react";
@@ -20,27 +20,18 @@ interface Item {
 }
 
 const Generator = () => {
-  const { data, error, isLoading } = api.data.fetchData.useQuery<{
-    feature: Item[];
-    change: Item[];
-    cause: Item[];
-    character: Item[];
-  }>({
+  const { data, error, isLoading } = api.data.fetchData.useQuery({
     specifier: "all",
   });
 
   const { getItem: languageGetItem } = useLocalStorage("language");
-  //const { getItem: getData, setItem: setData } = useLocalStorage("data");
   const { setItem: setData } = useLocalStorage("data");
+
   const [language, setLanguage] = useState<"en" | "pl">(
     languageGetItem || "pl"
   );
-  const [locked, setLocked] = React.useState<boolean[]>([
-    false,
-    false,
-    false,
-    false,
-  ]);
+  const [locked, setLocked] = useState<boolean[]>([false, false, false, false]);
+
   const [categories, setCategories] = useState<Item[][]>([]);
   const categoryNames = [
     { polish: "cecha", english: "feature" },
@@ -48,6 +39,7 @@ const Generator = () => {
     { polish: "przyczyna", english: "cause" },
     { polish: "charakter", english: "character" },
   ];
+
   const [items, setItems] = useState<Item[]>([]);
   const isPolish = language === "pl" || !language;
 
@@ -90,10 +82,10 @@ const Generator = () => {
     }
   }, [data]);
 
-  const toggleLock = (cardIndex: number) => {
+  const toggleLock = (index: number) => {
     setLocked((prevLocked) => {
       const newLocked = [...prevLocked];
-      newLocked[cardIndex] = !newLocked[cardIndex];
+      newLocked[index] = !newLocked[index];
       return newLocked;
     });
   };
@@ -109,24 +101,14 @@ const Generator = () => {
 
     const newItems = items
       .map((item, index) => {
-        // Check if the category is valid and contains items
         if (categories[index] && categories[index].length > 0) {
           const randomIndex = randomIndices[index];
-
-          if (
-            randomIndex &&
-            randomIndex >= 0 &&
-            randomIndex < categories[index].length
-          ) {
+          if (randomIndex)
             return locked[index] ? item : categories[index][randomIndex];
-          }
         }
-        // Return the original item if category is invalid or out-of-range index
         return item;
       })
       .filter((item): item is Item => item !== undefined);
-
-    console.log("NEW", newItems);
     setItems(newItems);
   };
 
@@ -150,6 +132,7 @@ const Generator = () => {
           className={styles.boyImage}
           src={designerBoy}
           alt="Illustration of a designer boy character"
+          priority={true}
         />
         <header className={styles.headerMain}>
           <h1>{isPolish ? "generator etiud™" : "etude generator™"}</h1>

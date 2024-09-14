@@ -1,3 +1,5 @@
+"use client";
+
 import "./style.scss";
 import React from "react";
 import PolishFlag from "./Flags/PolishFlag";

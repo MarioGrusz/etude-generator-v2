@@ -3,12 +3,13 @@
 
 .lockerButton {
   pointer-events: all;
+  color: white;
 }
 
 .locker {
   height: 1.8rem;
   width: 1.8rem;
-  transition: transform 0.3s ease-in-out, color 0.1s ease-in;
+  transition: transform 0.5s ease-in-out, color 0.3s ease-in;
   fill: currentColor;
 
   @include respond-to("extra-large") {
@@ -23,11 +24,11 @@
 }
 
 .locker.locked {
-  color: white;
-  transition: fill 0.1s ease-in;
+  color: black;
+  transition: fill 0.3s ease-in;
 }
 
 .locker.unlocked {
-  color: black;
-  transition: fill 0.1s ease-in;
+  color: white;
+  transition: fill 0.3s ease-in;
 }
