@@ -1,4 +1,4 @@
-.smile-wrapper {
+.smileWrapper {
   height: 100vh;
   width: 100%;
   display: flex;
@@ -8,19 +8,19 @@
   gap: 2rem;
 }
 
-.smile svg {
+.smileSvg {
   width: 200px;
   height: 200px;
   animation: rotate 12s linear infinite;
 }
 
-.st0 {
+.stroke0 {
   fill: none;
   stroke: #000000;
   stroke-width: 3;
 }
 
-.st1 {
+.stroke1 {
   fill: none;
   stroke: #000000;
   stroke-width: 3;

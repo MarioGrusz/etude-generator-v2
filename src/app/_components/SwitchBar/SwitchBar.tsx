@@ -1,6 +1,6 @@
 "use client";
 
-import "./style.scss";
+import styles from "./switchbar.module.scss";
 import React from "react";
 import PolishFlag from "./Flags/PolishFlag";
 import EnglishFlag from "./Flags/EnglishFlag";
@@ -26,26 +26,29 @@ const SwitchBar: React.FC<SwitchBarProps> = ({ language, setLanguage }) => {
   const isPolish = language === "pl" || !language;
 
   return (
-    <div className="switch">
+    <div className={styles.switch}>
       <a
         href=""
-        //className={`switch-pl ${language === "pl" ? "active" : ""}`}
-        className={`switch-pl ${isPolish ? "active" : ""}`}
+        className={`${styles.switchPl} ${isPolish ? styles.active : ""}`}
         onClick={(event) => handleLanguageChange(event, "pl")}
       >
-        <span className="image">
+        <span className={styles.image}>
           <PolishFlag />
-          <span className="text">{isPolish ? "POLSKI" : "POLISH"}</span>
+          <span className={styles.text}>{isPolish ? "POLSKI" : "POLISH"}</span>
         </span>
       </a>
       <a
         href=""
-        className={`switch-en ${language === "en" ? "active" : ""}`}
+        className={`${styles.switchEn} ${
+          language === "en" ? styles.active : ""
+        }`}
         onClick={(event) => handleLanguageChange(event, "en")}
       >
-        <span className="image">
+        <span className={styles.image}>
           <EnglishFlag />
-          <span className="text">{isPolish ? "ANGIELSKI" : "ENGLISH"}</span>
+          <span className={styles.text}>
+            {isPolish ? "ANGIELSKI" : "ENGLISH"}
+          </span>
         </span>
       </a>
     </div>

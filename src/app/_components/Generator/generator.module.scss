@@ -1,5 +1,5 @@
-@import "../styles/mixins";
-@import "../styles/variables";
+@import "../../styles/mixins";
+@import "../../styles/variables";
 
 .mainContainer {
   display: flex;
@@ -31,7 +31,7 @@
 
 .headerMain {
   margin-left: -5.5rem;
-  width: fit-content;
+  width: max-content;
   max-width: 100%;
   text-align: flex-start;
   overflow: hidden;
@@ -61,7 +61,6 @@
   width: 15rem;
   align-self: flex-start;
 
-  //border: 1px solid black;
   transform: translateX(-2rem);
 
   @include respond-to("medium") {

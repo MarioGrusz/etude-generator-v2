@@ -1,17 +1,19 @@
-"use client";
+/* eslint-disable @typescript-eslint/consistent-type-imports */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 
+"use client";
+
 import styles from "./generator.module.scss";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ReactNode } from "react";
 import designerBoy from "~/app/assets/designer_boy.png";
-import SwitchBar from "./SwitchBar";
-import { useLocalStorage } from "../hooks/useLocalStorage";
-import Card from "./Card";
-import { getYear } from "../utils/currentYear";
-import Smile from "./Smile";
-import { api } from "~/trpc/react";
+import SwitchBar from "../SwitchBar";
+import { useLocalStorage } from "../../hooks/useLocalStorage";
+import Card from "../Card";
+import { getYear } from "../../utils/currentYear";
+import Smile from "../Smile";
 import Image from "next/image";
+import { useData } from "~/app/context/DataContext";
 
 interface Item {
   id: number;
@@ -20,9 +22,7 @@ interface Item {
 }
 
 const Generator = () => {
-  const { data, error, isLoading } = api.data.fetchData.useQuery({
-    specifier: "all",
-  });
+  const { data, isLoading, error, categories } = useData();
 
   const { getItem: languageGetItem } = useLocalStorage("language");
   const { setItem: setData } = useLocalStorage("data");
@@ -32,7 +32,6 @@ const Generator = () => {
   );
   const [locked, setLocked] = useState<boolean[]>([false, false, false, false]);
 
-  const [categories, setCategories] = useState<Item[][]>([]);
   const categoryNames = [
     { polish: "cecha", english: "feature" },
     { polish: "zmiana", english: "change" },
@@ -45,38 +44,25 @@ const Generator = () => {
 
   useEffect(() => {
     if (data) {
-      const newCategories: Item[][] = [];
+      //console.log("cat", categories);
       const newItems: Item[] = [];
 
-      if (data.feature) {
-        newCategories.push(data.feature);
-        if (data.feature[0]) {
-          newItems.push(data.feature[0]);
-        }
+      if (data.feature?.length && data.feature[0]) {
+        newItems.push(data.feature[0]);
       }
 
-      if (data.change) {
-        newCategories.push(data.change);
-        if (data.change[0]) {
-          newItems.push(data.change[0]);
-        }
+      if (data.change?.length && data.change[0]) {
+        newItems.push(data.change[0]);
       }
 
-      if (data.cause) {
-        newCategories.push(data.cause);
-        if (data.cause[0]) {
-          newItems.push(data.cause[0]);
-        }
+      if (data.cause?.length && data.cause[0]) {
+        newItems.push(data.cause[0]);
       }
 
-      if (data.character) {
-        newCategories.push(data.character);
-        if (data.character[0]) {
-          newItems.push(data.character[0]);
-        }
+      if (data.character?.length && data.character[0]) {
+        newItems.push(data.character[0]);
       }
 
-      setCategories(newCategories);
       setItems(newItems);
       setData(data);
     }
@@ -119,7 +105,7 @@ const Generator = () => {
     return <div>Oops! Something went wrong. Please try again later.</div>;
 
   if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (error) return <div>Error: {error as ReactNode}</div>;
   return (
     <main className={styles.mainContainer}>
       <SwitchBar

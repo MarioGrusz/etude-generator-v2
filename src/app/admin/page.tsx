@@ -1,13 +1,12 @@
-// app/about/page.tsx
-import React from "react";
+import { HydrateClient } from "~/trpc/server";
+import AdminPanel from "../_components/Admin/admin";
 
-const AboutPage = () => {
+export default async function admin() {
   return (
-    <div>
-      <h1>About Us</h1>
-      <p>This is the about page of our application.</p>
-    </div>
+    <HydrateClient>
+      <>
+        <AdminPanel />
+      </>
+    </HydrateClient>
   );
-};
-
-export default AboutPage;
+}
