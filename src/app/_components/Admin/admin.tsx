@@ -8,18 +8,19 @@ import { useLocalStorage } from "../../hooks/useLocalStorage";
 import { useData } from "~/app/context/DataContext";
 
 interface Item {
+  id?: number;
   polish: string;
   english: string;
 }
 
-interface ItemSQL {
-  categoryName: string;
+interface ItemForDatabase {
+  category: string;
   polish: string;
   english: string;
 }
 
 const AdminPanel = () => {
-  const { data, isLoading, error } = useData();
+  const { data, isLoading, error, insertData, deleteItem } = useData();
   const { getItem: getLanguageFromLocalStorage } = useLocalStorage("language");
   const [language, setLanguage] = useState<"en" | "pl">("pl");
 
@@ -45,13 +46,11 @@ const AdminPanel = () => {
     english: string;
   } | null>(null);
 
-  const [newItem, setNewItem] = useState<ItemSQL>({
-    categoryName: "",
+  const [newItem, setNewItem] = useState<ItemForDatabase>({
+    category: "",
     polish: "",
     english: "",
   });
-
-  const [itemToSend, setItemToSent] = useState<ItemSQL | null>(null);
 
   const [allCategoryItems, setAllCategoryItems] = useState<Item[]>([]);
 
@@ -63,7 +62,7 @@ const AdminPanel = () => {
     setSelectedCategory(category);
     if (data) setAllCategoryItems(data[category.key] ?? []);
     setNewItem({
-      categoryName: category.english,
+      category: category.english,
       polish: "",
       english: "",
     });
@@ -81,16 +80,20 @@ const AdminPanel = () => {
 
   const handleAddNewItem = () => {
     if (selectedCategory && newItem.polish && newItem.english) {
-      console.log("NEW", newItem);
-      setItemToSent(newItem);
-      //setAllCategoryItems((prevItems) => [...prevItems, newItem]);
-      setNewItem({ categoryName: "", polish: "", english: "" });
+      insertData(newItem);
+      setAllCategoryItems((prevItems) => [...prevItems, newItem]); //optimistic UI update
+      setNewItem({ category: "", polish: "", english: "" });
     }
   };
 
-  useEffect(() => {
-    console.log(itemToSend);
-  }, [itemToSend]);
+  const handleDeleteItem = (category: string, id: number) => {
+    setAllCategoryItems(
+      (
+        prevItems //optimistic UI update
+      ) => prevItems.filter((item) => item.id !== id)
+    );
+    deleteItem(category, id);
+  };
 
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error loading data</p>;
@@ -137,12 +140,9 @@ const AdminPanel = () => {
               <div key={index} className={styles.itemWrapper}>
                 <p> {isPolish ? item.polish : item.english}</p>
                 <button
-                  onClick={() => {
-                    const filteredItems = allCategoryItems.filter(
-                      (existingItem) => existingItem !== item
-                    );
-                    setAllCategoryItems(filteredItems);
-                  }}
+                  onClick={() =>
+                    handleDeleteItem(selectedCategory?.key ?? "", item.id ?? 0)
+                  }
                 >
                   {isPolish ? "Usun" : "Remove"}
                 </button>

@@ -9,9 +9,9 @@ interface Client {
 }
 
 interface Item {
-  categoryName: string;
-  polishWord: string;
-  englishWord: string;
+  category: string;
+  polish: string;
+  english: string;
 }
 
 interface QueryResult {
@@ -20,8 +20,8 @@ interface QueryResult {
 
 export const insertIntoDatabase = async (word: Item, client?: Client) => {
   const validCategories = ["feature", "change", "cause", "character"];
-  if (!validCategories.includes(word.categoryName)) {
-    console.error("Invalid category name:", word.categoryName);
+  if (!validCategories.includes(word.category)) {
+    console.error("Invalid category name:", word.category);
     return false;
   }
 
@@ -31,7 +31,7 @@ export const insertIntoDatabase = async (word: Item, client?: Client) => {
     await localClient.query("BEGIN");
 
     const query = `
-        INSERT INTO ${word.categoryName} (polish, english)
+        INSERT INTO ${word.category} (polish, english)
         VALUES ($1, $2)
         ON CONFLICT (polish)
         DO UPDATE SET polish = EXCLUDED.polish, english = EXCLUDED.english
@@ -39,8 +39,8 @@ export const insertIntoDatabase = async (word: Item, client?: Client) => {
       `;
 
     const wordResult = (await localClient.query(query, [
-      word.polishWord,
-      word.englishWord,
+      word.polish,
+      word.english,
     ])) as QueryResult;
 
     await localClient.query("COMMIT");

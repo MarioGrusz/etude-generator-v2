@@ -11,7 +11,7 @@ interface QueryResult {
   rows: QueryResultRow[];
 }
 
-export const deleteWordFromDatabase = async (
+export const deleteItem = async (
   category: string,
   id: number,
   client?: Client
