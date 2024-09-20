@@ -137,11 +137,16 @@
           border-radius: 5rem;
           padding: 0.5rem 2rem;
           text-transform: uppercase;
+          transition: background-color 0.7s;
 
           @include respond-to("large") {
             padding: 0.5rem 3rem;
             font-size: 1rem;
           }
+        }
+
+        button:hover {
+          background-color: black;
         }
       }
     }

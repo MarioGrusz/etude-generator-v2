@@ -28,7 +28,7 @@ interface ItemForDatabase {
 
 const AdminPanel = () => {
   //const { data, isLoading, error, insertData, deleteItem } = useData();
-  const { data, isLoading, error, insertData } = useData();
+  const { data, isLoading, error, insertData, deleteItem } = useData();
   const { getItem: getLanguageFromLocalStorage } = useLocalStorage("language");
   const [language, setLanguage] = useState<"en" | "pl">("pl");
   const [itemToDelete, setItemToDelete] = useState<{
@@ -43,10 +43,6 @@ const AdminPanel = () => {
       setLanguage(storedLanguage as "en" | "pl");
     }
   }, [getLanguageFromLocalStorage]);
-
-  // useEffect(() => {
-  //   setIsModalOpen(false);
-  // }, []);
 
   const isPolish = language === "pl" || !language;
 
@@ -103,14 +99,14 @@ const AdminPanel = () => {
     }
   };
 
-  // const handleDeleteItem = (category: string, id: number) => {
-  //   setAllCategoryItems(
-  //     (
-  //       prevItems //optimistic UI update
-  //     ) => prevItems.filter((item) => item.id !== id)
-  //   );
-  //   deleteItem(category, id);
-  // };
+  const handleDeleteItem = (category: string, id: number) => {
+    setAllCategoryItems(
+      (
+        prevItems //optimistic UI update
+      ) => prevItems.filter((item) => item.id !== id)
+    );
+    deleteItem(category, id);
+  };
 
   const handleDeleteClick = (category: Category, item: Item) => {
     setIsModalOpen(true);
@@ -127,6 +123,7 @@ const AdminPanel = () => {
         setIsModalOpen={setIsModalOpen}
         itemInfo={itemToDelete}
         isPolish={isPolish}
+        handleDeleteItem={handleDeleteItem}
       />
       <header className={styles.adminPanel__header}>
         <h1>Admin Panel</h1>
@@ -167,13 +164,6 @@ const AdminPanel = () => {
             {allCategoryItems.map((item, index) => (
               <div key={index} className={styles.itemWrapper}>
                 <p> {isPolish ? item.polish : item.english}</p>
-                {/* <button
-                  onClick={() =>
-                    handleDeleteItem(selectedCategory?.key ?? "", item.id ?? 0)
-                  }
-                >
-                  {isPolish ? "Usun" : "Remove"}
-                </button> */}
                 <button
                   onClick={() => handleDeleteClick(selectedCategory!, item)}
                 >

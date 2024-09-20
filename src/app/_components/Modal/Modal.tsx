@@ -20,6 +20,7 @@ interface ModalProps {
   setIsModalOpen: (value: boolean) => void;
   itemInfo: { category: Category; item: Item } | null;
   isPolish: boolean;
+  handleDeleteItem: (category: string, id: number) => void;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -27,6 +28,7 @@ const Modal: React.FC<ModalProps> = ({
   setIsModalOpen,
   itemInfo,
   isPolish,
+  handleDeleteItem,
 }) => {
   const modalRef = useRef<HTMLDialogElement | null>(null);
 
@@ -51,6 +53,13 @@ const Modal: React.FC<ModalProps> = ({
     }
   };
 
+  const handleConfirmDelete = () => {
+    if (itemInfo) {
+      handleDeleteItem(itemInfo.category.key, itemInfo.item.id ?? 0);
+    }
+    setIsModalOpen(false);
+  };
+
   if (!isModalOpen) return null;
 
   return (
@@ -71,7 +80,7 @@ const Modal: React.FC<ModalProps> = ({
         <button onClick={handleCloseModal}>
           {isPolish ? "cofnij" : "cancel"}
         </button>
-        <button className={styles.modalDeleteBtn}>
+        <button onClick={handleConfirmDelete} className={styles.modalDeleteBtn}>
           {isPolish ? "usuń" : "delete"}
         </button>
       </div>
