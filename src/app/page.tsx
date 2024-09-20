@@ -1,7 +1,7 @@
 // /* eslint-disable @typescript-eslint/no-unsafe-call */
 // /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { HydrateClient } from "~/trpc/server";
-import Generator from "./_components/Generator";
+import Generator from "./_components/Generator/Generator";
 
 export default async function Home() {
   return (
