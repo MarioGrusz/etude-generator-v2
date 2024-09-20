@@ -8,7 +8,13 @@ type LockIconProps = {
 
 const Locker: React.FC<LockIconProps> = ({ locked, onLockToggle }) => {
   return (
-    <div role="button" className={styles.lockerButton} onClick={onLockToggle}>
+    <button
+      role="button"
+      className={styles.lockerButton}
+      onClick={onLockToggle}
+      aria-pressed={locked}
+      aria-label={locked ? "Unlock" : "Lock"}
+    >
       {locked ? (
         <svg
           data-testid="locked"
@@ -40,7 +46,7 @@ const Locker: React.FC<LockIconProps> = ({ locked, onLockToggle }) => {
           ></path>
         </svg>
       )}
-    </div>
+    </button>
   );
 };
 

@@ -6,7 +6,7 @@
 
 import styles from "./Generator.module.scss";
 import React, { useState, useEffect } from "react";
-import designerBoy from "~/app/assets/designer_boy.png";
+import designerBoy from "~/app/assets/designer_boy.webp";
 import SwitchBar from "../SwitchBar";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import Card from "../Card";
