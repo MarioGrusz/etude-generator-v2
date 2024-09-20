@@ -1,5 +1,5 @@
 import { HydrateClient } from "~/trpc/server";
-import AdminPanel from "../_components/Admin/Admin";
+import AdminPanel from "~/app/_components/Admin/Admin";
 
 export default async function admin() {
   return (
