@@ -1,5 +1,5 @@
 "use client";
-import styles from "./locker.module.scss";
+import styles from "./Locker.module.scss";
 
 type LockIconProps = {
   locked: boolean;

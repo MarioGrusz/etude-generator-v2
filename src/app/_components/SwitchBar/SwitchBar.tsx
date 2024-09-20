@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "./switchbar.module.scss";
+import styles from "./Switchbar.module.scss";
 import React from "react";
 import PolishFlag from "./Flags/PolishFlag";
 import EnglishFlag from "./Flags/EnglishFlag";

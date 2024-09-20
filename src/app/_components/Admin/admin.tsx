@@ -1,14 +1,21 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 
-import styles from "./admin.module.scss";
+import styles from "./Admin.module.scss";
 import React, { useState, useEffect } from "react";
 import SwitchBar from "../SwitchBar";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import { useData } from "~/app/context/DataContext";
+import Modal from "../Modal/Modal";
 
 interface Item {
   id?: number;
+  polish: string;
+  english: string;
+}
+
+interface Category {
+  key: string;
   polish: string;
   english: string;
 }
@@ -23,6 +30,11 @@ const AdminPanel = () => {
   const { data, isLoading, error, insertData, deleteItem } = useData();
   const { getItem: getLanguageFromLocalStorage } = useLocalStorage("language");
   const [language, setLanguage] = useState<"en" | "pl">("pl");
+  const [itemToDelete, setItemToDelete] = useState<{
+    category: Category;
+    item: Item;
+  } | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const storedLanguage = getLanguageFromLocalStorage();
@@ -31,7 +43,13 @@ const AdminPanel = () => {
     }
   }, [getLanguageFromLocalStorage]);
 
+  // useEffect(() => {
+  //   setIsModalOpen(false);
+  // }, []);
+
   const isPolish = language === "pl" || !language;
+
+  console.log("MOD", isModalOpen);
 
   const categoryNames = [
     { key: "feature", polish: "cecha", english: "feature" },
@@ -40,11 +58,9 @@ const AdminPanel = () => {
     { key: "character", polish: "charakter", english: "character" },
   ];
 
-  const [selectedCategory, setSelectedCategory] = useState<{
-    key: string;
-    polish: string;
-    english: string;
-  } | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(
+    null
+  );
 
   const [newItem, setNewItem] = useState<ItemForDatabase>({
     category: "",
@@ -95,11 +111,22 @@ const AdminPanel = () => {
     deleteItem(category, id);
   };
 
+  const handleDeleteClick = (category: Category, item: Item) => {
+    setIsModalOpen(true);
+    setItemToDelete({ category, item });
+  };
+
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error loading data</p>;
 
   return (
     <main className={styles.adminPanel}>
+      <Modal
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        itemInfo={itemToDelete}
+        isPolish={isPolish}
+      />
       <header className={styles.adminPanel__header}>
         <h1>Admin Panel</h1>
         <SwitchBar
@@ -139,10 +166,15 @@ const AdminPanel = () => {
             {allCategoryItems.map((item, index) => (
               <div key={index} className={styles.itemWrapper}>
                 <p> {isPolish ? item.polish : item.english}</p>
-                <button
+                {/* <button
                   onClick={() =>
                     handleDeleteItem(selectedCategory?.key ?? "", item.id ?? 0)
                   }
+                >
+                  {isPolish ? "Usun" : "Remove"}
+                </button> */}
+                <button
+                  onClick={() => handleDeleteClick(selectedCategory!, item)}
                 >
                   {isPolish ? "Usun" : "Remove"}
                 </button>

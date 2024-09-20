@@ -1,0 +1,59 @@
+.modal {
+  width: 20rem;
+  height: 20rem;
+  padding: 2rem;
+  border: 0;
+  border-radius: 1rem;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: hsl(0 0% 0% / 10%) 0 0 0.5rem 0.25rem;
+  border: 1px solid #ccc;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.modal::backdrop {
+  background: hsl(0 0% 0% / 50%);
+}
+
+.question {
+  font-size: 1.5rem;
+  font-weight: 300;
+
+  strong {
+    font-size: 1.5rem;
+    font-weight: 900;
+  }
+}
+
+.btnsWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  button {
+    padding: 0.5rem 2rem;
+    border-radius: 5rem;
+    text-transform: uppercase;
+  }
+
+  button:first-child {
+    border: 1px solid black;
+  }
+}
+
+.modalDeleteBtn {
+  font-weight: 600;
+  background-color: #f00;
+  color: white;
+}
+
+.modal .modal::backdrop {
+  background: hsl(0 0% 0% / 50%);
+}

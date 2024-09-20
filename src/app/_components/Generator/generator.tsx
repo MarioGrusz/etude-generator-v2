@@ -4,8 +4,8 @@
 
 "use client";
 
-import styles from "./generator.module.scss";
-import React, { useState, useEffect, ReactNode } from "react";
+import styles from "./Generator.module.scss";
+import React, { useState, useEffect } from "react";
 import designerBoy from "~/app/assets/designer_boy.png";
 import SwitchBar from "../SwitchBar";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
@@ -44,7 +44,6 @@ const Generator = () => {
 
   useEffect(() => {
     if (data) {
-      //console.log("cat", categories);
       const newItems: Item[] = [];
 
       if (data.feature?.length && data.feature[0]) {
@@ -104,8 +103,6 @@ const Generator = () => {
   if (error)
     return <div>Oops! Something went wrong. Please try again later.</div>;
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error as ReactNode}</div>;
   return (
     <main className={styles.mainContainer}>
       <SwitchBar

@@ -1,7 +1,7 @@
 "use client";
 
 import Locker from "../Locker";
-import styles from "./card.module.scss";
+import styles from "./Card.module.scss";
 import React from "react";
 
 interface Category {

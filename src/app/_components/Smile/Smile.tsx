@@ -1,6 +1,6 @@
 "use client";
 /* eslint-disable react/react-in-jsx-scope */
-import styles from "./smile.module.scss";
+import styles from "./Smile.module.scss";
 
 const Smile = () => {
   return (
