@@ -27,7 +27,8 @@ interface ItemForDatabase {
 }
 
 const AdminPanel = () => {
-  const { data, isLoading, error, insertData, deleteItem } = useData();
+  //const { data, isLoading, error, insertData, deleteItem } = useData();
+  const { data, isLoading, error, insertData } = useData();
   const { getItem: getLanguageFromLocalStorage } = useLocalStorage("language");
   const [language, setLanguage] = useState<"en" | "pl">("pl");
   const [itemToDelete, setItemToDelete] = useState<{
@@ -102,14 +103,14 @@ const AdminPanel = () => {
     }
   };
 
-  const handleDeleteItem = (category: string, id: number) => {
-    setAllCategoryItems(
-      (
-        prevItems //optimistic UI update
-      ) => prevItems.filter((item) => item.id !== id)
-    );
-    deleteItem(category, id);
-  };
+  // const handleDeleteItem = (category: string, id: number) => {
+  //   setAllCategoryItems(
+  //     (
+  //       prevItems //optimistic UI update
+  //     ) => prevItems.filter((item) => item.id !== id)
+  //   );
+  //   deleteItem(category, id);
+  // };
 
   const handleDeleteClick = (category: Category, item: Item) => {
     setIsModalOpen(true);

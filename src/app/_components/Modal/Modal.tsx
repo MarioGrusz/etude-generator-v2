@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import styles from "./Modal.module.scss";
 
 interface Item {
@@ -14,11 +14,6 @@ interface Category {
   polish: string;
   english: string;
 }
-
-// interface ItemToDeleteInfo {
-//   category: Category;
-//   item: Item;
-// }
 
 interface ModalProps {
   isModalOpen: boolean;
@@ -80,8 +75,6 @@ const Modal: React.FC<ModalProps> = ({
           {isPolish ? "usuń" : "delete"}
         </button>
       </div>
-
-      {/* {children} */}
     </dialog>
   );
 };
