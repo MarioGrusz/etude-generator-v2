@@ -6,13 +6,13 @@
 
 import styles from "./Generator.module.scss";
 import React, { useState, useEffect } from "react";
-import designerBoy from "~/app/assets/designer_boy.webp";
-import SwitchBar from "../SwitchBar";
-import { useLocalStorage } from "../../hooks/useLocalStorage";
-import Card from "../Card";
-import { getYear } from "../../utils/currentYear";
-import Smile from "../Smile";
 import Image from "next/image";
+import designerBoy from "~/app/assets/designer_boy.webp";
+import SwitchBar from "~/app/_components/SwitchBar";
+import Smile from "~/app/_components/Smile";
+import Card from "~/app/_components/Card";
+import { useLocalStorage } from "~/app/hooks/useLocalStorage";
+import { getYear } from "~/app/utils/currentYear";
 import { useData } from "~/app/context/DataContext";
 
 interface Item {

@@ -4,7 +4,7 @@ import styles from "./Switchbar.module.scss";
 import React from "react";
 import PolishFlag from "./Flags/PolishFlag";
 import EnglishFlag from "./Flags/EnglishFlag";
-import { useLocalStorage } from "../../hooks/useLocalStorage";
+import { useLocalStorage } from "~/app/hooks/useLocalStorage";
 
 interface SwitchBarProps {
   language: "en" | "pl";

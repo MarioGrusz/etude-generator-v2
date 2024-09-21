@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 /* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/consistent-type-imports */
@@ -27,6 +28,7 @@ export interface DataType {
 }
 
 interface ItemForDatabase {
+  id?: number;
   category: string;
   polish: string;
   english: string;
@@ -51,10 +53,42 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({
     specifier: "all",
   });
 
-  const utils = api.useUtils(); //access to React Query context for invalidation
+  const utils = api.useUtils();
 
   const insertMutation = api.data.insertData.useMutation({
-    onSuccess: () => {
+    onMutate: async ({ category, polish, english }) => {
+      await utils.data.fetchData.cancel();
+
+      const previousData = utils.data.fetchData.getData();
+      const tempId = Date.now();
+
+      utils.data.fetchData.setData({ specifier: "all" }, (oldData) => {
+        if (!oldData) return oldData;
+
+        const updatedData = {
+          ...oldData,
+          [category]: [
+            ...(oldData[category] ?? []),
+            { id: tempId, polish, english },
+          ],
+        };
+
+        console.log("Updated Data after optimistic update:", updatedData);
+
+        return updatedData;
+      });
+
+      return { previousData };
+    },
+    onError: (error, variables, context) => {
+      if (context?.previousData) {
+        utils.data.fetchData.setData(
+          { specifier: "all" },
+          context.previousData
+        );
+      }
+    },
+    onSettled: () => {
       utils.data.fetchData.invalidate();
     },
   });
@@ -64,69 +98,40 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   const deleteMutation = api.data.deleteItem.useMutation({
-    onSuccess: () => {
+    onMutate: async ({ category, id }) => {
+      await utils.data.fetchData.cancel();
+
+      const previousData = utils.data.fetchData.getData();
+
+      utils.data.fetchData.setData({ specifier: "all" }, (oldData) => {
+        if (!oldData) return oldData;
+
+        const updatedData = {
+          ...oldData,
+          [category]: oldData[category]
+            ? oldData[category]?.filter((item) => item.id !== id)
+            : [],
+        };
+
+        console.log("Updated Data after optimistic update:", updatedData);
+
+        return updatedData;
+      });
+
+      return { previousData };
+    },
+    onError: (err, variables, context) => {
+      if (context?.previousData) {
+        utils.data.fetchData.setData(
+          { specifier: "all" },
+          context.previousData
+        );
+      }
+    },
+    onSettled: () => {
       utils.data.fetchData.invalidate();
     },
   });
-
-  // const deleteMutation = api.data.deleteItem.useMutation({
-  //   onMutate: async ({ category, id }) => {
-  //     await utils.data.fetchData.cancel()
-
-  //     const previousData = utils.data.fetchData.getData();
-
-  //     utils.data.fetchData.setData(undefined, (oldData) => {
-  //       if (!oldData) return oldData;
-
-  //       // Return a new state without the deleted item
-  //       return {
-  //         ...oldData,
-  //         [category]: oldData[category].filter((item) => item.id !== id),
-  //       };
-  //     })
-  //   }
-  // });
-
-  // const deleteMutation = api.data.deleteItem.useMutation({
-  //   // This is where the optimistic update starts
-  //   onMutate: async ({ category, id }) => {
-  //     // Cancel any outgoing refetches (so they don't overwrite optimistic update)
-  //     await utils.data.fetchData.cancel();
-
-  //     // Snapshot the previous data for rollback if needed
-  //     const previousData = utils.data.fetchData.getData();
-
-  //     // Optimistically update the UI by filtering out the deleted item
-  //     utils.data.fetchData.setData({ specifier: "all" }, (oldData) => {
-  //       if (!oldData || !oldData[category]) {
-  //         return oldData; // Return the existing data if oldData or the category doesn't exist
-  //       }
-
-  //       // Return a new state without the deleted item
-  //       return {
-  //         ...oldData,
-  //         [category]: oldData[category].filter((item) => item.id !== id),
-  //       };
-  //     });
-
-  //     // Return a context with the previousData to use in onError
-  //     return { previousData };
-  //   },
-  //   // In case of an error, rollback the optimistic update
-  //   onError: (err, variables, context) => {
-  //     if (context?.previousData) {
-  //       // Revert to the previous state
-  //       utils.data.fetchData.setData(
-  //         { specifier: "all" },
-  //         context.previousData
-  //       );
-  //     }
-  //   },
-  //   // After mutation success or failure, refetch the data
-  //   onSettled: () => {
-  //     utils.data.fetchData.invalidate();
-  //   },
-  // });
 
   const deleteItem = (category: string, id: number) => {
     deleteMutation.mutate({ category, id });

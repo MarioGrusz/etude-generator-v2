@@ -1,8 +1,8 @@
 "use client";
 
-import Locker from "../Locker";
 import styles from "./Card.module.scss";
 import React from "react";
+import Locker from "~/app/_components/Locker";
 
 interface Category {
   polish: string;

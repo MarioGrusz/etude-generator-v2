@@ -2,6 +2,7 @@
 
 import React, { useRef, useEffect } from "react";
 import styles from "./Modal.module.scss";
+import { useData } from "~/app/context/DataContext";
 
 interface Item {
   id?: number;
@@ -20,7 +21,6 @@ interface ModalProps {
   setIsModalOpen: (value: boolean) => void;
   itemInfo: { category: Category; item: Item } | null;
   isPolish: boolean;
-  handleDeleteItem: (category: string, id: number) => void;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -28,8 +28,8 @@ const Modal: React.FC<ModalProps> = ({
   setIsModalOpen,
   itemInfo,
   isPolish,
-  handleDeleteItem,
 }) => {
+  const { deleteItem } = useData();
   const modalRef = useRef<HTMLDialogElement | null>(null);
 
   useEffect(() => {
@@ -53,9 +53,9 @@ const Modal: React.FC<ModalProps> = ({
     }
   };
 
-  const handleConfirmDelete = () => {
+  const handleDeleteItem = () => {
     if (itemInfo) {
-      handleDeleteItem(itemInfo.category.key, itemInfo.item.id ?? 0);
+      deleteItem(itemInfo.category.key, itemInfo.item.id ?? 0);
     }
     setIsModalOpen(false);
   };
@@ -80,7 +80,7 @@ const Modal: React.FC<ModalProps> = ({
         <button onClick={handleCloseModal}>
           {isPolish ? "cofnij" : "cancel"}
         </button>
-        <button onClick={handleConfirmDelete} className={styles.modalDeleteBtn}>
+        <button onClick={handleDeleteItem} className={styles.modalDeleteBtn}>
           {isPolish ? "usuń" : "delete"}
         </button>
       </div>

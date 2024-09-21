@@ -2,11 +2,11 @@
 "use client";
 
 import styles from "./Admin.module.scss";
-import React, { useState, useEffect } from "react";
-import SwitchBar from "../SwitchBar";
-import { useLocalStorage } from "../../hooks/useLocalStorage";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
+import SwitchBar from "~/app/_components/SwitchBar/";
+import Modal from "~/app/_components/Modal";
+import { useLocalStorage } from "~/app/hooks/useLocalStorage";
 import { useData } from "~/app/context/DataContext";
-import Modal from "../Modal/Modal";
 
 interface Item {
   id?: number;
@@ -26,9 +26,15 @@ interface ItemForDatabase {
   english: string;
 }
 
+const categoryNames: Category[] = [
+  { key: "feature", polish: "cecha", english: "feature" },
+  { key: "change", polish: "zmiana", english: "change" },
+  { key: "cause", polish: "przyczyna", english: "cause" },
+  { key: "character", polish: "charakter", english: "character" },
+];
+
 const AdminPanel = () => {
-  //const { data, isLoading, error, insertData, deleteItem } = useData();
-  const { data, isLoading, error, insertData, deleteItem } = useData();
+  const { data, isLoading, error, insertData } = useData();
   const { getItem: getLanguageFromLocalStorage } = useLocalStorage("language");
   const [language, setLanguage] = useState<"en" | "pl">("pl");
   const [itemToDelete, setItemToDelete] = useState<{
@@ -36,82 +42,56 @@ const AdminPanel = () => {
     item: Item;
   } | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
-  useEffect(() => {
-    const storedLanguage = getLanguageFromLocalStorage();
-    if (storedLanguage) {
-      setLanguage(storedLanguage as "en" | "pl");
-    }
-  }, [getLanguageFromLocalStorage]);
-
-  const isPolish = language === "pl" || !language;
-
-  console.log("MOD", isModalOpen);
-
-  const categoryNames = [
-    { key: "feature", polish: "cecha", english: "feature" },
-    { key: "change", polish: "zmiana", english: "change" },
-    { key: "cause", polish: "przyczyna", english: "cause" },
-    { key: "character", polish: "charakter", english: "character" },
-  ];
-
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(
     null
   );
-
   const [newItem, setNewItem] = useState<ItemForDatabase>({
     category: "",
     polish: "",
     english: "",
   });
 
-  const [allCategoryItems, setAllCategoryItems] = useState<Item[]>([]);
+  useEffect(() => {
+    const storedLanguage = getLanguageFromLocalStorage();
+    if (storedLanguage) setLanguage(storedLanguage as "en" | "pl");
+  }, [getLanguageFromLocalStorage]);
 
-  const handleCategoryClick = (category: {
-    key: string;
-    polish: string;
-    english: string;
-  }) => {
+  const isPolish = language === "pl" || !language;
+
+  const allCategoryItems = useMemo(
+    () => (selectedCategory ? data?.[selectedCategory.key] ?? [] : []),
+    [data, selectedCategory]
+  );
+
+  const handleCategoryClick = useCallback((category: Category) => {
     setSelectedCategory(category);
-    if (data) setAllCategoryItems(data[category.key] ?? []);
-    setNewItem({
-      category: category.english,
-      polish: "",
-      english: "",
-    });
-  };
+    setNewItem({ category: category.english, polish: "", english: "" });
+  }, []);
 
-  const handleNewItemChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    if (selectedCategory)
-      setNewItem((prevItem) => ({
-        ...prevItem,
-        categoryName: selectedCategory.english,
-        [name]: value,
-      }));
-  };
+  const handleNewItemChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = e.target;
+      if (selectedCategory) {
+        setNewItem((prevItem) => ({
+          ...prevItem,
+          [name]: value,
+        }));
+      }
+    },
+    [selectedCategory]
+  );
 
-  const handleAddNewItem = () => {
+  const handleAddNewItem = useCallback(() => {
     if (selectedCategory && newItem.polish && newItem.english) {
       insertData(newItem);
-      setAllCategoryItems((prevItems) => [...prevItems, newItem]); //optimistic UI update
       setNewItem({ category: "", polish: "", english: "" });
     }
-  };
+  }, [insertData, newItem, selectedCategory]);
 
-  const handleDeleteItem = (category: string, id: number) => {
-    setAllCategoryItems(
-      (
-        prevItems //optimistic UI update
-      ) => prevItems.filter((item) => item.id !== id)
-    );
-    deleteItem(category, id);
-  };
-
-  const handleDeleteClick = (category: Category, item: Item) => {
+  const handleDeleteClick = useCallback((category: Category, item: Item) => {
     setIsModalOpen(true);
     setItemToDelete({ category, item });
-  };
+  }, []);
 
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error loading data</p>;
@@ -123,7 +103,6 @@ const AdminPanel = () => {
         setIsModalOpen={setIsModalOpen}
         itemInfo={itemToDelete}
         isPolish={isPolish}
-        handleDeleteItem={handleDeleteItem}
       />
       <header className={styles.adminPanel__header}>
         <h1>Admin Panel</h1>
@@ -152,18 +131,18 @@ const AdminPanel = () => {
 
         <div className={styles.adminPanel__displayCategories}>
           <div className={styles.words}>
-            {selectedCategory ? (
-              <h1>
-                {isPolish ? selectedCategory.polish : selectedCategory.english}
-              </h1>
-            ) : (
-              <h1>
-                {isPolish ? "Wybierz kategorie" : "Please select Category"}
-              </h1>
-            )}
+            <h1>
+              {selectedCategory
+                ? isPolish
+                  ? selectedCategory.polish
+                  : selectedCategory.english
+                : isPolish
+                ? "Wybierz kategorie"
+                : "Please select Category"}
+            </h1>
             {allCategoryItems.map((item, index) => (
               <div key={index} className={styles.itemWrapper}>
-                <p> {isPolish ? item.polish : item.english}</p>
+                <p>{isPolish ? item.polish : item.english}</p>
                 <button
                   onClick={() => handleDeleteClick(selectedCategory!, item)}
                 >
@@ -178,7 +157,6 @@ const AdminPanel = () => {
               {isPolish
                 ? "Dodaj nowy element do kategorii: "
                 : "Add New Item to category: "}
-
               <span>
                 {selectedCategory &&
                   (isPolish

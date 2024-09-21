@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
+
 import { QueryResultRow } from "pg";
 import { pool } from "./connection";
 
