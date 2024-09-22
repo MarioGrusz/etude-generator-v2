@@ -5,6 +5,8 @@
 import pkg from "pg";
 const { Pool } = pkg;
 
+console.log("STRING", process.env.POSTGRES_CONNECTION_STRING);
+
 export const pool = new Pool({
   connectionString: process.env.POSTGRES_CONNECTION_STRING,
 });

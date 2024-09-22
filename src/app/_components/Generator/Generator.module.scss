@@ -135,7 +135,10 @@
 }
 
 .developedBy {
-  display: inline;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
 
   a {
     display: inline;
@@ -158,5 +161,10 @@
   a:hover::before {
     transform: scaleX(1);
     transform-origin: left;
+  }
+
+  .monster {
+    height: 1.5rem;
+    width: 1.5rem;
   }
 }

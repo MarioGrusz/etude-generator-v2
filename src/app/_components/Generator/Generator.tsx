@@ -8,6 +8,7 @@ import styles from "./Generator.module.scss";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import designerBoy from "~/app/assets/designer_boy.webp";
+import monster from "~/app/assets/monster.png";
 import SwitchBar from "~/app/_components/SwitchBar";
 import Smile from "~/app/_components/Smile";
 import Card from "~/app/_components/Card";
@@ -163,7 +164,11 @@ const Generator = () => {
             rel="noopener noreferrer"
             aria-label="Visit Mariusz Gruszczynski's Portfolio Website"
           >
-            Mariusz Gruszczynski
+            <Image
+              className={styles.monster}
+              src={monster}
+              alt="Illustration of a designer boy character"
+            />
           </a>
         </p>
       </footer>
