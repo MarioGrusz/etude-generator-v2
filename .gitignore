@@ -20,6 +20,7 @@ next-env.d.ts
 
 # production
 /build
+/outtakes
 
 # misc
 .DS_Store

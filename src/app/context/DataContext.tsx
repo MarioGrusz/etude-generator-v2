@@ -34,6 +34,15 @@ interface ItemForDatabase {
   english: string;
 }
 
+/* 
+
+  TODO LATER: 
+  1. general function to updateData,
+  2. general function to mutate data
+  DRY
+
+*/
+
 interface DataContextType {
   data: Record<string, Item[]> | undefined;
   isLoading: boolean;
