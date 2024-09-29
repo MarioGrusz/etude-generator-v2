@@ -8,11 +8,11 @@ export const env = createEnv({
    */
   server: {
     NODE_ENV: z.enum(["development", "test", "production"]),
-    // PG_TEST_USER: z.string(),
-    // PG_TEST_HOST: z.string(),
-    // PG_PASSWORD: z.string(),
-    // PG_TEST_DATABASE: z.string(),
-    // PG_PORT: z.string(),
+    PG_TEST_USER: z.string(),
+    PG_TEST_HOST: z.string(),
+    PG_PASSWORD: z.string(),
+    PG_TEST_DATABASE: z.string(),
+    PG_PORT: z.string(),
   },
 
   /**
@@ -30,11 +30,11 @@ export const env = createEnv({
    */
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
-    // PG_TEST_USER: process.env.PG_TEST_USER,
-    // PG_TEST_HOST: process.env.PG_TEST_HOST,
-    // PG_PASSWORD: process.env.PG_PASSWORD,
-    // PG_TEST_DATABASE: process.env.PG_TEST_DATABASE,
-    // PG_PORT: process.env.PG_PORT,
+    PG_TEST_USER: process.env.PG_TEST_USER,
+    PG_TEST_HOST: process.env.PG_TEST_HOST,
+    PG_PASSWORD: process.env.PG_PASSWORD,
+    PG_TEST_DATABASE: process.env.PG_TEST_DATABASE,
+    PG_PORT: process.env.PG_PORT,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

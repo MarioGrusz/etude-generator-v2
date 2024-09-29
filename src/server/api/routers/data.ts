@@ -3,8 +3,26 @@ import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { fetchDataBySpecifier } from "~/server/db/retrieve";
 import { insertIntoDatabase } from "~/server/db/insert";
 import { deleteItem } from "~/server/db/delete";
+import { getRandomItems } from "~/server/db/getRandomItems/getRandomItems";
 
 export const dataRouter = createTRPCRouter({
+  getRandomItems: publicProcedure
+    .input(
+      z.object({
+        feature_id: z.number().nullable(),
+        change_id: z.number().nullable(),
+        cause_id: z.number().nullable(),
+        character_id: z.number().nullable(),
+      })
+    )
+    .query(async ({ input }) => {
+      const randomWords = await getRandomItems(input);
+      if (!randomWords) {
+        throw new Error("Random words not found or invalid input");
+      }
+      return randomWords;
+    }),
+
   fetchData: publicProcedure
     .input(z.object({ specifier: z.string() }))
     .query(async ({ input }) => {

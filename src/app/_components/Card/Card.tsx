@@ -26,7 +26,7 @@ interface CardProps {
 const Card: React.FC<CardProps> = ({
   category,
   item,
-  locked,
+  locked = false,
   language,
   onLockToggle,
 }) => {

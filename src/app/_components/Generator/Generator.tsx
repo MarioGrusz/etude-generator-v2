@@ -1,11 +1,7 @@
-/* eslint-disable @typescript-eslint/consistent-type-imports */
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-
 "use client";
 
 import styles from "./Generator.module.scss";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import designerBoy from "~/app/assets/designer_boy.webp";
 import monster from "~/app/assets/monster.png";
@@ -14,7 +10,7 @@ import Smile from "~/app/_components/Smile";
 import Card from "~/app/_components/Card";
 import { useLocalStorage } from "~/app/hooks/useLocalStorage";
 import { getYear } from "~/app/utils/currentYear";
-import { useData } from "~/app/context/DataContext";
+import useGenerator from "./useGenerator";
 
 interface Item {
   id: number;
@@ -22,87 +18,35 @@ interface Item {
   english: string;
 }
 
+const categoryNames = [
+  { polish: "cecha", english: "feature" },
+  { polish: "zmiana", english: "change" },
+  { polish: "przyczyna", english: "cause" },
+  { polish: "charakter", english: "character" },
+];
+
+const currentYear = getYear();
+
 const Generator = () => {
-  const { data, isLoading, error, categories } = useData();
+  const { lockedItems, toggleLock, handleGenerate, data, isLoading, error } =
+    useGenerator();
 
   const { getItem: languageGetItem } = useLocalStorage("language");
-  const { setItem: setData } = useLocalStorage("data");
-
   const [language, setLanguage] = useState<"en" | "pl">(
     languageGetItem || "pl"
   );
-  const [locked, setLocked] = useState<boolean[]>([false, false, false, false]);
-
-  const categoryNames = [
-    { polish: "cecha", english: "feature" },
-    { polish: "zmiana", english: "change" },
-    { polish: "przyczyna", english: "cause" },
-    { polish: "charakter", english: "character" },
-  ];
-
-  const [items, setItems] = useState<Item[]>([]);
   const isPolish = language === "pl" || !language;
-
-  useEffect(() => {
-    if (data) {
-      const newItems: Item[] = [];
-
-      if (data.feature?.length && data.feature[0]) {
-        newItems.push(data.feature[0]);
-      }
-
-      if (data.change?.length && data.change[0]) {
-        newItems.push(data.change[0]);
-      }
-
-      if (data.cause?.length && data.cause[0]) {
-        newItems.push(data.cause[0]);
-      }
-
-      if (data.character?.length && data.character[0]) {
-        newItems.push(data.character[0]);
-      }
-
-      setItems(newItems);
-      setData(data);
-    }
-  }, [data]);
-
-  const toggleLock = (index: number) => {
-    setLocked((prevLocked) => {
-      const newLocked = [...prevLocked];
-      newLocked[index] = !newLocked[index];
-      return newLocked;
-    });
-  };
-
-  const getRandomIndices = React.useCallback(() => {
-    return categories.map((category) =>
-      Math.floor(Math.random() * category.length)
-    );
-  }, [categories]);
-
-  const shuffleAll = () => {
-    const randomIndices = getRandomIndices();
-
-    const newItems = items
-      .map((item, index) => {
-        if (categories[index] && categories[index].length > 0) {
-          const randomIndex = randomIndices[index];
-          if (randomIndex)
-            return locked[index] ? item : categories[index][randomIndex];
-        }
-        return item;
-      })
-      .filter((item): item is Item => item !== undefined);
-    setItems(newItems);
-  };
-
-  const currentYear = getYear();
 
   if (isLoading) return <Smile />;
   if (error)
     return <div>Oops! Something went wrong. Please try again later.</div>;
+
+  const items = [
+    data?.result.feature,
+    data?.result.change,
+    data?.result.cause,
+    data?.result.character,
+  ];
 
   return (
     <main className={styles.mainContainer}>
@@ -128,26 +72,26 @@ const Generator = () => {
       >
         {items.map((item, index) => {
           const category = categoryNames[index];
-          const isLocked = locked[index];
+          if (!category) return null;
+          const isBlocked = lockedItems.get(category.english)?.blocked ?? false;
 
-          if (!category || isLocked === undefined) {
-            return null;
-          }
           return (
             <Card
               key={index}
               category={category}
-              item={item}
-              locked={isLocked}
+              item={item as Item}
+              locked={isBlocked}
               language={language}
-              onLockToggle={() => toggleLock(index)}
+              onLockToggle={() =>
+                toggleLock(category.english, item?.id ?? null)
+              }
             />
           );
         })}
       </section>
       <button
+        onClick={handleGenerate}
         className={styles.generator}
-        onClick={shuffleAll}
         aria-label={
           isPolish ? "Generuj wszystkie etudy" : "Generate all etudes"
         }
