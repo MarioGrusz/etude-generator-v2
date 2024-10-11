@@ -83,15 +83,40 @@ export function generateDynamicQuery(ids: Ids): {
   return { query, params };
 }
 
+
+
+const cachedValues = {}
+const cacheState = {
+  nextUpdate: new Date(2000, 1, 1),
+  progress: null,
+}
+
+async function getFromCache() {
+  if(cacheState.nextUpdate < new Date()){{
+     if(cacheState.progress) {
+       return await cacheState.progress
+     }
+     cacheState.progress = new Promise(() => {
+       // load and return cache
+       cacheState.nextUpdate = new Date() + ...
+       // update cachedValues
+       return cachedValues
+     })
+  }}
+  return cachedValues
+}
+
 export async function getRandomItems(
   options: Ids,
   client?: Client
 ): Promise<Result[] | null> {
+
   const localClient = client ?? (await pool.connect());
 
   try {
     await localClient.query("BEGIN");
     const { query, params } = generateDynamicQuery(options);
+    console.log("XX", query, params)
     const res = await localClient.query(query, params);
     await localClient.query("COMMIT");
 
