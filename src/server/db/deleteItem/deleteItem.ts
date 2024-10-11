@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 
 import { QueryResultRow } from "pg";
-import { pool } from "./config/connection";
+import { pool } from "../config/connection";
 
 interface Client {
   query: (queryText: string, values?: unknown[]) => Promise<unknown>;

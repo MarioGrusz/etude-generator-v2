@@ -1,33 +1,13 @@
+/* eslint-disable @typescript-eslint/consistent-type-imports */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { pool } from "../config/connection";
-
-interface Client {
-  query: (queryText: string, values?: unknown[]) => Promise<unknown>;
-  release(): unknown;
-}
-
-interface Ids {
-  feature_id: number | null;
-  change_id: number | null;
-  cause_id: number | null;
-  character_id: number | null;
-}
-
-interface BaseItem {
-  id: number;
-  polish: string;
-  english: string;
-}
-
-interface QueryResult {
-  result: {
-    feature: BaseItem;
-    change: BaseItem;
-    cause: BaseItem;
-    character: BaseItem;
-  };
-}
+import {
+  type Client,
+  type QueryResult,
+  type Ids,
+  type Result,
+} from "../interfaces";
 
 export function generateDynamicQuery(ids: Ids): {
   query: string;
@@ -100,17 +80,27 @@ export function generateDynamicQuery(ids: Ids): {
     LEFT JOIN cause ON true
     LEFT JOIN character ON true;
   `;
-  //console.log(query, params);
   return { query, params };
 }
 
 export async function getRandomItems(
-  options: Ids
-): Promise<QueryResult | undefined> {
-  const { query, params } = generateDynamicQuery(options);
-  const { rows } = await pool.query<QueryResult>(query, params);
-  if (!rows || rows.length === 0) return undefined;
-  const structuredResult = rows[0];
-  console.log("Fetched Row:", structuredResult);
-  return structuredResult!;
+  options: Ids,
+  client?: Client
+): Promise<Result[] | null> {
+  const localClient = client ?? (await pool.connect());
+
+  try {
+    await localClient.query("BEGIN");
+    const { query, params } = generateDynamicQuery(options);
+    const res = await localClient.query(query, params);
+    await localClient.query("COMMIT");
+
+    return (res as QueryResult).rows.map((row) => ({
+      result: row.result,
+    })) as Result[];
+  } catch (error) {
+    await localClient.query("ROLLBACK");
+    console.error("Error fetching data:", error);
+    return null;
+  }
 }

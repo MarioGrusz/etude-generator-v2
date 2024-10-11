@@ -2,35 +2,25 @@
 
 import React, { useRef, useEffect } from "react";
 import styles from "./Modal.module.scss";
-import { useData } from "~/app/context/DataContext";
-
-interface Item {
-  id?: number;
-  polish: string;
-  english: string;
-}
-
-interface Category {
-  key: string;
-  polish: string;
-  english: string;
-}
-
-interface ModalProps {
-  isModalOpen: boolean;
-  setIsModalOpen: (value: boolean) => void;
-  itemInfo: { category: Category; item: Item } | null;
-  isPolish: boolean;
-}
+import { type ModalProps } from "./interfaces";
 
 const Modal: React.FC<ModalProps> = ({
   isModalOpen,
   setIsModalOpen,
   itemInfo,
   isPolish,
+  deleteFn,
 }) => {
-  const { deleteItem } = useData();
   const modalRef = useRef<HTMLDialogElement | null>(null);
+
+  const labels = {
+    question: isPolish
+      ? "Czy na pewno chcesz usunąć słowo: "
+      : "Are you shure you want to delete word: ",
+    fromCategory: isPolish ? "z kategorii: " : "from category: ",
+    cancel: isPolish ? "cofnij" : "cancel",
+    delete: isPolish ? "usuń" : "delete",
+  };
 
   useEffect(() => {
     const modalElement = modalRef.current;
@@ -53,35 +43,24 @@ const Modal: React.FC<ModalProps> = ({
     }
   };
 
-  const handleDeleteItem = () => {
-    if (itemInfo) {
-      deleteItem(itemInfo.category.key, itemInfo.item.id ?? 0);
-    }
-    setIsModalOpen(false);
-  };
-
   if (!isModalOpen) return null;
 
   return (
     <dialog className={styles.modal} ref={modalRef} onKeyDown={handleKeyDown}>
       <p className={styles.question}>
-        {isPolish
-          ? "Czy na pewno chcesz usunąć słowo: "
-          : "Are you shure you want to delete word: "}
+        {labels.question}
         <strong>
           {isPolish ? itemInfo?.item.polish : itemInfo?.item.english}
         </strong>{" "}
-        {isPolish ? "z kategorii: " : "from category: "}
+        {labels.fromCategory}
         <strong>
           {isPolish ? itemInfo?.category.polish : itemInfo?.category.english}
         </strong>
       </p>
       <div className={styles.btnsWrapper}>
-        <button onClick={handleCloseModal}>
-          {isPolish ? "cofnij" : "cancel"}
-        </button>
-        <button onClick={handleDeleteItem} className={styles.modalDeleteBtn}>
-          {isPolish ? "usuń" : "delete"}
+        <button onClick={handleCloseModal}>{labels.cancel}</button>
+        <button onClick={deleteFn} className={styles.modalDeleteBtn}>
+          {labels.delete}
         </button>
       </div>
     </dialog>

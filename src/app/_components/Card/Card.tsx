@@ -3,25 +3,7 @@
 import styles from "./Card.module.scss";
 import React from "react";
 import Locker from "~/app/_components/Locker";
-
-interface Category {
-  polish: string;
-  english: string;
-}
-
-interface Item {
-  id: number;
-  polish: string;
-  english: string;
-}
-
-interface CardProps {
-  category: Category;
-  item: Item;
-  locked: boolean;
-  language: "pl" | "en";
-  onLockToggle: () => void;
-}
+import { type CardProps } from "./interfaces";
 
 const Card: React.FC<CardProps> = ({
   category,
@@ -34,9 +16,9 @@ const Card: React.FC<CardProps> = ({
 
   return (
     <div className={styles.card}>
-      <button className={styles.button} data-testid="button-locked">
+      <div className={styles.button} data-testid="button-locked">
         <Locker locked={locked} onLockToggle={onLockToggle} />
-      </button>
+      </div>
 
       <div
         data-testid="content"

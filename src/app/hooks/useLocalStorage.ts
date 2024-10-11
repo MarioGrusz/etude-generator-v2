@@ -3,10 +3,10 @@
 import { useState, useEffect } from "react";
 
 export const useLocalStorage = (key: string) => {
-  const [isClient, setIsClient] = useState(false); //To prevent window is undefined error
+  const [isClient, setIsClient] = useState(false); //Line to prevent window is undefined error
 
   useEffect(() => {
-    setIsClient(typeof window !== "undefined"); // Set to true once the code runs in the browser
+    setIsClient(typeof window !== "undefined"); //I set to true once the code runs in the browser
   }, []);
 
   const setItem = (value: unknown) => {

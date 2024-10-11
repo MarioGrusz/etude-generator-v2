@@ -1,0 +1,86 @@
+@import "../../styles/mixins";
+@import "../../styles/variables";
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+
+  gap: 3rem;
+  padding: 2rem 0;
+
+  @include respond-to("large") {
+    flex: 1;
+  }
+
+  h2,
+  span {
+    font-size: 3rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  span {
+    color: black;
+  }
+
+  form {
+    min-height: fit-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+    text-transform: uppercase;
+
+    @include respond-to("small") {
+      gap: 5rem;
+    }
+  }
+
+  label {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+
+  label:focus-within {
+    color: black;
+    font-weight: 900;
+  }
+
+  input {
+    text-align: center;
+    margin-top: 1rem;
+    border: 1px solid black;
+    border-radius: 5rem;
+    padding: 1rem 1rem;
+    font-size: 1rem;
+  }
+
+  input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px black;
+  }
+
+  input::placeholder {
+    font-size: 1rem;
+    text-transform: uppercase;
+
+    opacity: 0.4;
+  }
+
+  button {
+    pointer-events: all;
+    background-color: black;
+    color: white;
+    border-radius: 5rem;
+    padding: 1rem 5rem;
+    text-transform: uppercase;
+  }
+}

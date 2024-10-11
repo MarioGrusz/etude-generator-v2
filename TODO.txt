@@ -1,0 +1,7 @@
+1. useLolaStorage to save language and data
+
+2. AUtH with Next.js
+
+3. refactor Admin Panel
+
+4. Admin Panel / Generator ? not really components

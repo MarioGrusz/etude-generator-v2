@@ -1,41 +1,22 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { api } from "~/trpc/react";
-
-interface ToggleAttributes {
-  blocked?: boolean;
-  id: number | null;
-}
+import {
+  INITIAL_QUERY_PARAMS,
+  INITIAL_LOCKED_ITEMS,
+  Categories,
+} from "./constants";
+import { type ToggleAttributes, type QueryParams } from "./interfaces";
 
 const useGenerator = () => {
-  const [lockedItems, setLockedItems] = useState<Map<string, ToggleAttributes>>(
-    new Map([
-      ["feature", { blocked: false, id: null }],
-      ["change", { blocked: false, id: null }],
-      ["cause", { blocked: false, id: null }],
-      ["character", { blocked: false, id: null }],
-    ])
-  );
+  const [lockedItems, setLockedItems] =
+    useState<Map<string, ToggleAttributes>>(INITIAL_LOCKED_ITEMS);
+  const [queryParams, setQueryParams] =
+    useState<QueryParams>(INITIAL_QUERY_PARAMS);
 
-  const [queryParams, setQueryParams] = useState<{
-    feature_id: number | null;
-    change_id: number | null;
-    cause_id: number | null;
-    character_id: number | null;
-  }>({
-    feature_id: null,
-    change_id: null,
-    cause_id: null,
-    character_id: null,
-  });
+  const { data, isLoading, error, refetch } =
+    api.data.getRandomItems.useQuery(queryParams);
 
-  const { data, isLoading, error, refetch } = api.data.getRandomItems.useQuery(
-    queryParams,
-    {
-      enabled: true,
-    }
-  );
-
-  const toggleLock = (category: string, id: number | null) => {
+  const toggleLock = useCallback((category: string, id: number | null) => {
     setLockedItems((prevLockedItems) => {
       const newLockedItems = new Map(prevLockedItems);
       const currentLockedState = newLockedItems.get(category);
@@ -47,14 +28,14 @@ const useGenerator = () => {
 
       return newLockedItems;
     });
-  };
+  }, []);
 
   const handleGenerate = async () => {
     setQueryParams({
-      feature_id: lockedItems.get("feature")?.id ?? null,
-      change_id: lockedItems.get("change")?.id ?? null,
-      cause_id: lockedItems.get("cause")?.id ?? null,
-      character_id: lockedItems.get("character")?.id ?? null,
+      feature_id: lockedItems.get(Categories.FEATURE)?.id ?? null,
+      change_id: lockedItems.get(Categories.CHANGE)?.id ?? null,
+      cause_id: lockedItems.get(Categories.CAUSE)?.id ?? null,
+      character_id: lockedItems.get(Categories.CHARACTER)?.id ?? null,
     });
 
     await refetch();

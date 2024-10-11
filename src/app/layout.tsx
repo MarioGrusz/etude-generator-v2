@@ -3,7 +3,6 @@ import "./styles/reset.scss";
 import "./styles/global.scss";
 
 import { TRPCReactProvider } from "~/trpc/react";
-import { DataProvider } from "./context/DataContext";
 
 export const metadata: Metadata = {
   title: "Etude Generator",
@@ -38,9 +37,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <TRPCReactProvider>
-          <DataProvider>{children}</DataProvider>
-        </TRPCReactProvider>
+        <TRPCReactProvider>{children}</TRPCReactProvider>
       </body>
     </html>
   );

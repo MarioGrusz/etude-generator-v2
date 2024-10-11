@@ -1,0 +1,64 @@
+@import "../../styles/mixins";
+@import "../../styles/variables";
+
+.words {
+  border: 1px solid $black;
+  border-radius: 1rem;
+  padding: 2rem 0;
+
+  @include respond-to("large") {
+    flex: 1;
+  }
+
+  h1 {
+    text-align: center;
+    border-bottom: 1px solid $black;
+    font-size: 2rem;
+    text-transform: uppercase;
+    padding-bottom: 1rem;
+
+    @include respond-to("small") {
+      font-size: 3rem;
+    }
+
+    @include respond-to("large") {
+      font-size: 3rem;
+      font-weight: 900;
+    }
+  }
+
+  .itemWrapper {
+    border-bottom: 1px solid $black;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+
+    p {
+      text-transform: uppercase;
+      font-weight: 900;
+      font-size: 1rem;
+
+      @include respond-to("large") {
+        font-size: 2rem;
+      }
+    }
+
+    button {
+      border: 1px solid $black;
+      border-radius: 5rem;
+      padding: 0.5rem 2rem;
+      text-transform: uppercase;
+      transition: background-color 0.7s;
+
+      @include respond-to("large") {
+        padding: 0.5rem 3rem;
+        font-size: 1rem;
+      }
+    }
+
+    button:hover {
+      background-color: $black;
+    }
+  }
+}

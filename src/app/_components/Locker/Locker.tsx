@@ -1,10 +1,6 @@
 "use client";
 import styles from "./Locker.module.scss";
-
-type LockIconProps = {
-  locked: boolean;
-  onLockToggle: () => void;
-};
+import { type LockIconProps } from "./interfaces";
 
 const Locker: React.FC<LockIconProps> = ({ locked, onLockToggle }) => {
   return (

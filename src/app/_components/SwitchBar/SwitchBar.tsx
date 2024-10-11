@@ -5,11 +5,7 @@ import React from "react";
 import PolishFlag from "./Flags/PolishFlag";
 import EnglishFlag from "./Flags/EnglishFlag";
 import { useLocalStorage } from "~/app/hooks/useLocalStorage";
-
-interface SwitchBarProps {
-  language: "en" | "pl";
-  setLanguage: (newLanguage: "en" | "pl") => void;
-}
+import { type SwitchBarProps } from "./interfaces";
 
 const SwitchBar: React.FC<SwitchBarProps> = ({ language, setLanguage }) => {
   const { setItem: languageSetItem } = useLocalStorage("language");

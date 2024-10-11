@@ -1,0 +1,56 @@
+@import "../../styles/mixins";
+@import "../../styles/variables";
+
+.adminPanel {
+  padding: 0.5rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 5rem;
+  margin-inline: auto;
+
+  @include respond-to("large") {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 80%;
+  }
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+
+    @include respond-to("small") {
+      flex-direction: row;
+    }
+
+    @include respond-to("large") {
+      width: 80%;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      text-transform: uppercase;
+      font-weight: 900;
+    }
+  }
+
+  &__forms {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 4rem;
+    min-height: 50vh;
+    width: 100%; //80
+  }
+
+  &__displayCategories {
+    grid-template-columns: 1fr;
+
+    @include respond-to("large") {
+      display: flex;
+    }
+  }
+}

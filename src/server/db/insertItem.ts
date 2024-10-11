@@ -1,25 +1,10 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { QueryResultRow } from "pg";
 import { pool } from "./config/connection";
+import { type Client, type QueryResult, type ItemToInsert } from "./interfaces";
 
-interface Client {
-  query: (queryText: string, values?: unknown[]) => Promise<unknown>;
-  release(): unknown;
-}
-
-interface Item {
-  category: string;
-  polish: string;
-  english: string;
-}
-
-interface QueryResult {
-  rows: QueryResultRow[];
-}
-
-export const insertIntoDatabase = async (word: Item, client?: Client) => {
+export const insertItem = async (word: ItemToInsert, client?: Client) => {
   const validCategories = ["feature", "change", "cause", "character"];
   if (!validCategories.includes(word.category)) {
     console.error("Invalid category name:", word.category);

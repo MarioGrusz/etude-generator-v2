@@ -1,0 +1,34 @@
+@import "../../styles/mixins";
+@import "../../styles/variables";
+
+.categoryMenu ul {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 2rem;
+
+  @include respond-to("medium") {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  li {
+    border: 1px solid $black;
+    border-radius: 5rem;
+    padding: 0.5rem 2rem;
+    margin-bottom: 1rem;
+
+    display: flex;
+    justify-content: center;
+
+    button {
+      text-transform: uppercase;
+      font-weight: 900;
+      font-size: 0.6rem;
+
+      @include respond-to("small") {
+        font-size: 1rem;
+      }
+    }
+  }
+}

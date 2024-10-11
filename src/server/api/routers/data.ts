@@ -1,8 +1,8 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { fetchDataBySpecifier } from "~/server/db/retrieve";
-import { insertIntoDatabase } from "~/server/db/insert";
-import { deleteItem } from "~/server/db/delete";
+import { getDataByCategory } from "~/server/db/getCategoryData";
+import { insertItem } from "~/server/db/insertItem";
+import { deleteItem } from "~/server/db/deleteItem/deleteItem";
 import { getRandomItems } from "~/server/db/getRandomItems/getRandomItems";
 
 export const dataRouter = createTRPCRouter({
@@ -23,10 +23,12 @@ export const dataRouter = createTRPCRouter({
       return randomWords;
     }),
 
-  fetchData: publicProcedure
-    .input(z.object({ specifier: z.string() }))
+  getCategoryData: publicProcedure
+    .input(
+      z.object({ specifier: z.string().min(1, "Category cannot be empty") })
+    )
     .query(async ({ input }) => {
-      const data = await fetchDataBySpecifier(input.specifier);
+      const data = await getDataByCategory(input.specifier);
       if (!data) {
         throw new Error("Data not found or invalid specifier");
       }
@@ -42,14 +44,14 @@ export const dataRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input }) => {
-      const wordSet = await insertIntoDatabase(input);
+      const wordSet = await insertItem(input);
       if (!wordSet) {
         throw new Error("Error during inserting data");
       }
       return wordSet;
     }),
 
-  deleteItem: publicProcedure
+  deleteData: publicProcedure
     .input(
       z.object({
         category: z.string(),
