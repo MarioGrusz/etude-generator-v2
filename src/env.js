@@ -8,11 +8,11 @@ export const env = createEnv({
    */
   server: {
     NODE_ENV: z.enum(["development", "test", "production"]),
-    PG_TEST_USER: z.string(),
-    PG_TEST_HOST: z.string(),
-    PG_PASSWORD: z.string(),
-    PG_TEST_DATABASE: z.string(),
-    PG_PORT: z.string(),
+    PG_TEST_USER: z.string().optional(), // Make optional
+    PG_TEST_HOST: z.string().optional(), // Make optional
+    PG_PASSWORD: z.string().optional(), // Make optional
+    PG_TEST_DATABASE: z.string().optional(), // Make optional
+    PG_PORT: z.string().optional(), // Make optional
   },
 
   /**
