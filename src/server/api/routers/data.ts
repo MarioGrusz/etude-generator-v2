@@ -1,22 +1,22 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { getDataByCategory } from "~/server/db/getCategoryData";
-import { insertItem } from "~/server/db/insertItem";
+import { getDataByCategory } from "~/server/db/getCategories/getCategories";
+import { insertItem } from "~/server/db/insertItem/insertItem";
 import { deleteItem } from "~/server/db/deleteItem/deleteItem";
-import { getRandomItems } from "~/server/db/getRandomItems/getRandomItems";
+import { getFourRandomItems } from "~/server/db/getRandomItems/getRandomItems";
 
 export const dataRouter = createTRPCRouter({
   getRandomItems: publicProcedure
     .input(
       z.object({
-        feature_id: z.number().nullable(),
-        change_id: z.number().nullable(),
-        cause_id: z.number().nullable(),
-        character_id: z.number().nullable(),
+        feature: z.number().nullable(),
+        change: z.number().nullable(),
+        cause: z.number().nullable(),
+        character: z.number().nullable(),
       })
     )
     .query(async ({ input }) => {
-      const randomWords = await getRandomItems(input);
+      const randomWords = await getFourRandomItems(input);
       if (!randomWords) {
         throw new Error("Random words not found or invalid input");
       }

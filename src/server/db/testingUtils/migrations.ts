@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 
-import { Client } from "pg";
+import { type Client } from "~/server/db/interfaces";
 
 export const runMigrations = async (client: Client): Promise<void> => {
   try {

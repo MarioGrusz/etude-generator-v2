@@ -10,10 +10,10 @@ export interface ToggleAttributes {
 }
 
 export interface QueryParams {
-  feature_id: number | null;
-  change_id: number | null;
-  cause_id: number | null;
-  character_id: number | null;
+  feature: number | null;
+  change: number | null;
+  cause: number | null;
+  character: number | null;
 }
 
 export interface Category {

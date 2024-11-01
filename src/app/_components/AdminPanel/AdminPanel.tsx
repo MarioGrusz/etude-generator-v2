@@ -14,6 +14,7 @@ import { useInsertData } from "./hooks/useInsertData";
 import { useDeleteData } from "./hooks/useDeleteData";
 import { type Category, type Item, type ItemToInsert } from "./interfaces";
 import { getSelectedCategoryName } from "./categoryUtils";
+import { logout } from "~/app/_components/Login/actions";
 
 const AdminPanel = () => {
   const { getItem: languageGetItem } = useLocalStorage("language");
@@ -76,6 +77,9 @@ const AdminPanel = () => {
       <header className={styles.adminPanel__header}>
         <h1>Admin Panel</h1>
         <SwitchBar language={language} setLanguage={setLanguage} />
+        <div className={styles.logoutButton}>
+          <button onClick={() => logout()}>Logout</button>
+        </div>
       </header>
 
       <section className={styles.adminPanel__forms}>

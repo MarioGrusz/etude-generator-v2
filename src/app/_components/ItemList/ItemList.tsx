@@ -21,9 +21,11 @@ const ItemList: React.FC<ItemListProps> = ({
         ? isPolish
           ? selectedCategoryName.polish
           : selectedCategoryName.english
-        : isPolish
-        ? "Wybierz jedną kategorię"
-        : "Please select Category"}
+        : null}
+      <span className={styles.categoryQuantity}>
+        {categoryItems.length}{" "}
+        {isPolish ? "wyrazy w kategorii" : "words in category"}
+      </span>
     </h1>
     {categoryItems.map((item, index) => (
       <div key={index} className={styles.itemWrapper}>

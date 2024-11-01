@@ -5,7 +5,7 @@ import { type User } from "./interfaces";
 
 export async function getUser(email: string): Promise<User | undefined> {
   try {
-    const query = `SELECT id, email, name FROM users WHERE email = $1`;
+    const query = `SELECT id, email, password, name FROM users WHERE email = $1`;
     const params = [email];
     const { rows } = await pool.query(query, params);
 

@@ -1,8 +1,12 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
-import { pool } from "./config/connection";
-import { type Client, type QueryResult, type Item } from "./interfaces";
+import { pool } from "../config/connection";
+import {
+  type Client,
+  type QueryResult,
+  type Item,
+} from "~/server/db/interfaces";
 
 export const getDataByCategory = async (
   category: string,
@@ -17,12 +21,8 @@ export const getDataByCategory = async (
   const localClient = client ?? (await pool.connect());
 
   try {
-    await localClient.query("BEGIN");
-
     const query = `SELECT id, polish, english FROM ${category};`;
     const res = await localClient.query(query);
-
-    await localClient.query("COMMIT");
 
     return (res as QueryResult).rows.map((row) => ({
       id: row.id,
@@ -30,11 +30,10 @@ export const getDataByCategory = async (
       english: row.english,
     })) as Item[];
   } catch (error) {
-    await localClient.query("ROLLBACK");
     console.error("Error fetching data:", error);
     return null;
   } finally {
-    if (!client) {
+    if (!client && localClient && typeof localClient.release === "function") {
       localClient.release();
     }
   }

@@ -6,10 +6,10 @@ export const INITIAL_LOCKED_ITEMS = new Map([
 ]);
 
 export const INITIAL_QUERY_PARAMS = {
-  feature_id: null,
-  change_id: null,
-  cause_id: null,
-  character_id: null,
+  feature: null,
+  change: null,
+  cause: null,
+  character: null,
 };
 
 export const Categories = {

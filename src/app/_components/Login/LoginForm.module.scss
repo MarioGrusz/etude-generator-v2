@@ -1,0 +1,50 @@
+.container {
+  max-height: 100vh;
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.form {
+  padding: 5rem;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+
+  .inputWrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+
+    input {
+      outline: none;
+      border: 1px solid black;
+      margin: 1rem 4rem;
+      padding: 1rem 0.5rem;
+      width: 100%;
+    }
+  }
+}
+
+.errorWrapper {
+  height: 2rem;
+}
+
+.textRed {
+  text-align: center;
+  color: red;
+}
+
+.submitButton {
+  border: 1px solid black;
+  padding: 1rem 3rem;
+  color: black;
+  text-transform: uppercase;
+}

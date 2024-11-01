@@ -16,6 +16,8 @@ const useGenerator = () => {
   const { data, isLoading, error, refetch } =
     api.data.getRandomItems.useQuery(queryParams);
 
+  console.log("DATA DATA", data);
+
   const toggleLock = useCallback((category: string, id: number | null) => {
     setLockedItems((prevLockedItems) => {
       const newLockedItems = new Map(prevLockedItems);
@@ -32,10 +34,10 @@ const useGenerator = () => {
 
   const handleGenerate = async () => {
     setQueryParams({
-      feature_id: lockedItems.get(Categories.FEATURE)?.id ?? null,
-      change_id: lockedItems.get(Categories.CHANGE)?.id ?? null,
-      cause_id: lockedItems.get(Categories.CAUSE)?.id ?? null,
-      character_id: lockedItems.get(Categories.CHARACTER)?.id ?? null,
+      feature: lockedItems.get(Categories.FEATURE)?.id ?? null,
+      change: lockedItems.get(Categories.CHANGE)?.id ?? null,
+      cause: lockedItems.get(Categories.CAUSE)?.id ?? null,
+      character: lockedItems.get(Categories.CHARACTER)?.id ?? null,
     });
 
     await refetch();

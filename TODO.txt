@@ -1,7 +1,23 @@
-1. useLolaStorage to save language and data
+1. useLolaStorage to save language and data 
 
-2. AUtH with Next.js
+2. AUtH with Next.js DONE
 
-3. refactor Admin Panel
+3. refactor Admin Panel DONE
 
 4. Admin Panel / Generator ? not really components
+
+5. cache on server DONE
+
+6. extend stale time for data
+
+7. pop up when item was added
+
+8. testing
+
+9. CI/CD
+
+10. ReadMe (basic readme how to run app)
+
+11. DOCKER??
+
+12. GENERATOR button disable while generating!!!!! DONE

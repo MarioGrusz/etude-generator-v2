@@ -3,18 +3,18 @@ import { QueryResultRow } from "pg";
 
 export interface Client {
   query: (queryText: string, values?: unknown[]) => Promise<unknown>;
-  release(): unknown;
+  release?: () => void;
 }
 
 export interface QueryResult {
   rows: QueryResultRow[];
 }
 
-export interface Ids {
-  feature_id: number | null;
-  change_id: number | null;
-  cause_id: number | null;
-  character_id: number | null;
+export interface ItemsIds {
+  feature: number | null;
+  change: number | null;
+  cause: number | null;
+  character: number | null;
 }
 
 export interface Item {
@@ -23,13 +23,20 @@ export interface Item {
   english: string;
 }
 
+// export interface Result {
+//   result: {
+//     feature: Item;
+//     change: Item;
+//     cause: Item;
+//     character: Item;
+//   };
+// }
+
 export interface Result {
-  result: {
-    feature: Item;
-    change: Item;
-    cause: Item;
-    character: Item;
-  };
+  feature: Item | null;
+  change: Item | null;
+  cause: Item | null;
+  character: Item | null;
 }
 
 export interface ItemToInsert {

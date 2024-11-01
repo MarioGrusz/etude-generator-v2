@@ -96,14 +96,14 @@
   }
 }
 
-.generator {
-  outline: none;
+.generatorButton {
   border: none;
   border: 1px solid back;
   border-radius: 5rem;
   padding: 1rem 3rem;
   background-color: #ede7d9;
   color: #02182b;
+  transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
 
   margin-inline: auto;
 
@@ -115,6 +115,16 @@
     @include respond-to("small") {
       font-size: 1.3rem;
     }
+  }
+
+  &:hover {
+    transform: scale(1.02);
+    transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  &.disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
   }
 
   @include respond-to("small") {

@@ -2,11 +2,7 @@
 
 import { QueryResultRow } from "pg";
 import { pool } from "../config/connection";
-
-interface Client {
-  query: (queryText: string, values?: unknown[]) => Promise<unknown>;
-  release(): unknown;
-}
+import { type Client } from "~/server/db/interfaces";
 
 interface QueryResult {
   rows: QueryResultRow[];
@@ -37,5 +33,9 @@ export const deleteItem = async (
     await localClient.query("ROLLBACK");
     console.error("Error deleting item:", error);
     return null;
+  } finally {
+    if (!client && localClient && typeof localClient.release === "function") {
+      localClient.release();
+    }
   }
 };

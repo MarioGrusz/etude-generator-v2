@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { pool } from "./config/connection";
-import { type Client, type QueryResult, type ItemToInsert } from "./interfaces";
+import { pool } from "../config/connection";
+import { type Client } from "~/server/db/interfaces";
+import { type QueryResult, type ItemToInsert } from "../interfaces";
 
 export const insertItem = async (word: ItemToInsert, client?: Client) => {
   const validCategories = ["feature", "change", "cause", "character"];
@@ -21,7 +22,7 @@ export const insertItem = async (word: ItemToInsert, client?: Client) => {
         VALUES ($1, $2)
         ON CONFLICT (polish)
         DO UPDATE SET polish = EXCLUDED.polish, english = EXCLUDED.english
-        RETURNING id;
+        RETURNING id, polish, english;
       `;
 
     const wordResult = (await localClient.query(query, [
@@ -37,10 +38,8 @@ export const insertItem = async (word: ItemToInsert, client?: Client) => {
     console.error("Error inserting word:", e);
     return false;
   } finally {
-    try {
-      await localClient.release();
-    } catch (releaseError) {
-      console.error("Error releasing client:", releaseError);
+    if (!client && localClient && typeof localClient.release === "function") {
+      localClient.release();
     }
   }
 };

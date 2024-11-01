@@ -27,10 +27,10 @@ const Generator: React.FC = () => {
   const isPolish = language === "pl";
 
   const items: Array<Item | null> = [
-    ...(data ? [data[0]?.result.feature ?? null] : []),
-    ...(data ? [data[0]?.result.change ?? null] : []),
-    ...(data ? [data[0]?.result.cause ?? null] : []),
-    ...(data ? [data[0]?.result.character ?? null] : []),
+    ...(data ? [data?.feature ?? null] : []),
+    ...(data ? [data?.change ?? null] : []),
+    ...(data ? [data?.cause ?? null] : []),
+    ...(data ? [data?.character ?? null] : []),
   ];
 
   console.log("ITEMS", items);
@@ -83,8 +83,9 @@ const Generator: React.FC = () => {
 
       <button
         onClick={handleGenerate}
-        className={styles.generator}
+        className={styles.generatorButton}
         aria-label={labels.generateAllAria}
+        disabled={isLoading}
       >
         <span>{labels.generateButton}</span>
       </button>
